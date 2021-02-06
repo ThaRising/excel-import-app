@@ -1,0 +1,15 @@
+version: "3.4"
+
+services:
+  server:
+    ports:
+      - 8080:8080
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    environment:
+      - DJANGO_SETTINGS_MODULE=BauerDude.settings.development
+      - DJANGO_AUTO_SETUP=1
+    network_mode: host
