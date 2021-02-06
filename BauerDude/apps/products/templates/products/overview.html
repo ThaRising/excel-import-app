@@ -1,0 +1,69 @@
+<link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+<div x-data="">
+    <input type="text" placeholder="Search..."
+           @keydown.enter.debounce.250="search_for_name($event)">
+</div>
+
+<div id="products"></div>
+
+<script>
+    const table = new Tabulator("#products", {
+        height: "95%",
+        index: "art_nr",
+        layout: "fitColumns",
+        ajaxURL: "/products/",
+        ajaxConfig: "GET",
+        ajaxResponse: (url, params, response) => {
+            return {
+                "last_page": Math.ceil(
+                        response.count / response.results.length
+                ),
+                "data": response.results
+            };
+        },
+        ajaxURLGenerator: (url, config, params) => {
+            const size = params.size;
+            const offset = params.page * size;
+            return `${url}?limit=${size}&offset=${offset.toString()}`;
+        },
+        columns: [
+            {title: "Artikel Nr.", field: "art_nr", width: "10%"},
+            {title: "Name", field: "name"},
+            {
+                title: "Pricing",
+                columns: [
+                    {title: "Weight Units", field: "weight_units", width: "10%"},
+                    {title: "Price", field: "price", width: "10%", mutator: (
+                            value, data, type, params, component
+                        ) => {
+                        return value * data.weight_units;
+                    }, formatter: "money", formatterParams: {
+                            decimal:",",
+                            thousand:".",
+                            symbol:"€",
+                            precision: 2,
+                            symbolAfter: false
+                        }
+                    },
+                    {title: "Available", field: "price_valid_until", mutator: (
+                            value, data, type, params, component
+                        ) => {
+                            return Date.parse(value) > Date.now();
+                        }, formatter: "tickCross", width: "10%"}
+                ]
+            },
+        ],
+        pagination: "remote",
+        paginationInitialPage: 0,
+        paginationSize: 50,
+        paginationSizeSelector: [25, 50, 100],
+    });
+    function search_for_name(e) {
+        table.setFilter([
+                {field: "name", type: "like", value: e.target.value}
+        ]);
+    }
+</script>

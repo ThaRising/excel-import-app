@@ -1,0 +1,32 @@
+# Exclude Environment and Config files
+.idea
+venv
+*.env
+.run
+keys
+
+# Exclude compiled files and caches
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
+
+# Exclude build files
+*.spec
+build
+dist
+*.egg-info
+
+# Exclude Terraform files
+.terraform/.terraform
+*.tfstate
+*.tfvars
+*.tfstate.backup
+terraform.plan
+
+# Exclude dev database and logs
+*.sqlite3
+*.log
+5000
+
+BauerDude/settings/keys.py
