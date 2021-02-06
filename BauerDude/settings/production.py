@@ -90,7 +90,7 @@ SIMPLE_JWT = {
 
 ALLOWED_HOSTS = [
     # Domain of the site you're planning to host on here
-    # '.herokuapp.com'
+    '.herokuapp.com'
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -111,7 +111,7 @@ CORS_EXPOSE_HEADERS = [
 ]
 CORS_ALLOWED_ORIGIN_REGEXES = [
     # Domain of the site you're planning to host on here
-    # r"^https://\w+\.herokuapp\.com$",
+    r"^https://\w+\.herokuapp\.com$",
 ]
 # This applies only to cookies, the integrated system
 # is using Header based Token-Auth
