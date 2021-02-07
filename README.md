@@ -69,15 +69,9 @@ to be persisted.
 
 ## Deployment
 
-This file includes a full
+This project includes a full
 setup for a pipeline
 from development to Heroku.
-
-If you do not wish to use this,
-you can remove the following:  
-- Procfile
-- runtime.txt
-- The package "dj-database-url" from the dependencies
 
 The following environment
 variables need to be set
@@ -85,3 +79,5 @@ for deployment:
 - ``SECRET_KEY``
 - ``ADMIN_EMAIL``
 - ``ADMIN_PASSWORD``
+- ``GSP_CREDENTIALS``
+- ``GSP_INSTANCES``
