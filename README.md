@@ -81,3 +81,4 @@ for deployment:
 - ``ADMIN_PASSWORD``
 - ``GSP_CREDENTIALS``
 - ``GSP_INSTANCES``
+- ``DATABASE_URL``
