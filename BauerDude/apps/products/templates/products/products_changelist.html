@@ -1,13 +1,8 @@
 {% extends 'admin/change_list.html' %}
 
 {% block object-tools %}
-    <script>
-        function flash_upload_msg() {
-            alert("Starting the file upload, this could take a while...");
-        }
-    </script>
     <div>
-        <form action="upload/" method="post" enctype="multipart/form-data" onsubmit="flash_upload_msg()">
+        <form action="upload/" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input
                     type="file"
