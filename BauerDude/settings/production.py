@@ -14,13 +14,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 
-SILKY_META = True
-SILKY_PYTHON_PROFILER = True
-SILKY_AUTHENTICATION = True  # User must login
-SILKY_AUTHORISATION = True  # User must have permissions
-SILKY_MAX_REQUEST_BODY_SIZE = 512
-SILKY_MAX_RESPONSE_BODY_SIZE = 512
-LOGIN_URL = "/djprofile/login/"
+# SILKY_META = True
+# SILKY_PYTHON_PROFILER = True
+# SILKY_AUTHENTICATION = True  # User must login
+# SILKY_AUTHORISATION = True  # User must have permissions
+# SILKY_MAX_REQUEST_BODY_SIZE = 512
+# SILKY_MAX_RESPONSE_BODY_SIZE = 512
+# LOGIN_URL = "/djprofile/login/"
 
 
 INSTALLED_APPS = [
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
-    'silk',
+    # 'silk',
 
     # Default apps
     'BauerDude.apps.users',
@@ -49,7 +49,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'silk.middleware.SilkyMiddleware',
+    # 'silk.middleware.SilkyMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
