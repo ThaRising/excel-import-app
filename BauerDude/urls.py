@@ -10,8 +10,8 @@ favicon_view = RedirectView.as_view(url='/static/favicon.ico', permanent=True)
 urlpatterns = [
     # Included URL paths
     path('admin/', admin.site.urls),
-    # path('djprofile/', include('silk.urls', namespace='silk')),
-    # path('djprofile/login/', LoginView.as_view()),
+    path('djprofile/', include('silk.urls', namespace='silk')),
+    path('djprofile/login/', LoginView.as_view()),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0),
             name='schema-json'),

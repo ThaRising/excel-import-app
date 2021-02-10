@@ -38,6 +38,7 @@ class ProductsViewSet(mixins.ListModelMixin,
     queryset = Product.objects.all()
     pagination_class = LimitOffsetPagination
     permission_classes = [permissions.AllowAny]
+    authentication_classes = []
 
 
 def overview_view(request):
