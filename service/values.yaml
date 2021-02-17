@@ -1,0 +1,17 @@
+global:
+  environment: development
+
+django:
+  image: tharising/django-docker:0.0.1
+  project: "BauerDude"
+
+  service:
+    port: false
+
+postgres:
+  username: "root"
+  password: "root"
+  database: "default"
+
+  service:
+    name: postgres-service

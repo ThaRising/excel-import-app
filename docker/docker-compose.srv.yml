@@ -12,4 +12,4 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=BauerDude.settings.development
       - DJANGO_AUTO_SETUP=1
-    network_mode: host
+      - DJANGO_DB_HOST=database

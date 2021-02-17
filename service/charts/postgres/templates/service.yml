@@ -1,0 +1,16 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Values.service.name }}
+spec:
+  selector:
+    app: postgres-container
+  ports:
+  {{- if eq .Values.global.environment "development" }}
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+  {{ else if eq .Values.global.environment "production" }}
+  type: ExternalName
+  externalName: {{ .Values.service.name }}
+  {{ end }}

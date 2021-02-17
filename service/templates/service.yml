@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-service
+  namespace: {{ .Release.Namespace }}
+  labels:
+    environment: {{ .Values.global.environment }}
+
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    {{ if .Values.django.service.port }}
+    nodePort: {{ int .Values.django.service.port }}
+    {{ end }}
+  selector:
+    app: django-container
