@@ -28,9 +28,6 @@ COPY ["BauerDude", "./"]
 ENV NGINX_HOST localhost
 ENV NGINX_PORT 8080
 
-WORKDIR /application/keys/
-COPY ./keys .
-
 WORKDIR /application/
 
 # Entrypoint compiles Nginx config & starts uWSGI
