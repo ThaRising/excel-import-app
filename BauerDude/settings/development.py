@@ -12,7 +12,7 @@ ADMIN_PASSWORD = 'root'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'default',
+        'NAME': os.getenv('DJANGO_DB_NAME', 'default'),
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': os.getenv('DJANGO_DB_HOST', 'localhost'),

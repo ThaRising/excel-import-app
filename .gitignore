@@ -16,6 +16,7 @@ __pycache__
 build
 dist
 *.egg-info
+.vagrant
 
 # Exclude Terraform files
 .terraform/.terraform
