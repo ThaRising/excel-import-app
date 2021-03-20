@@ -66,5 +66,8 @@ class Kunde(models.Model):
         verbose_name = "Kunde"
         verbose_name_plural = "Kunden"
 
+    def __str__(self) -> str:
+        return f"{self.kd_nr} -  {self.company_short}"
+
 
 __all__ = ["Product", "Price", "Kunde"]
