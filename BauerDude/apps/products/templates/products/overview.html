@@ -16,14 +16,18 @@
         layout: "fitColumns",
         ajaxURL: "/products/",
         ajaxConfig: "GET",
+        // This properly formats the data from our endpoint
+        // so it matches the data that Tabulator expects.
         ajaxResponse: (url, params, response) => {
             return {
-                "last_page": Math.ceil(
+                "last_page": Math.floor(
                         response.count / response.results.length
                 ),
                 "data": response.results
             };
         },
+        // This method is responsible for properly
+        // supplying the endpoint with pagination args.
         ajaxURLGenerator: (url, config, params) => {
             const size = params.size;
             const offset = params.page * size;
@@ -32,14 +36,36 @@
         columns: [
             {title: "Artikel Nr.", field: "art_nr", width: "10%"},
             {title: "Name", field: "name"},
-            {
-                title: "Pricing",
-                columns: [
-                    {title: "Weight Units", field: "weight_units", width: "10%"},
-                    {title: "Price", field: "price", width: "10%", mutator: (
+            {title: "Category", field: "category"},
+        ],
+        // This method currently handles the Price subtables.
+        // We need this so we can display potentially large lists of prices.
+        rowFormatter: (row) => {
+            // Create and style the holder elements
+            const holder_element = document.createElement("div");
+            const table_element = document.createElement("div");
+
+            holder_element.style.boxSizing = "border-box";
+            holder_element.style.padding = "10px 30px 10px 10px";
+            holder_element.style.borderTop = "1px solid #333";
+            holder_element.style.borderBotom = "1px solid #333";
+            holder_element.style.background = "#ddd";
+
+            table_element.style.border = "1px solid #333";
+
+            holder_element.appendChild(table_element);
+
+            row.getElement().appendChild(holder_element);
+
+            const pricing_sub_table = new Tabulator(table_element, {
+                layout: "fitColumns",
+                data: row.getData().prices,
+                columns:[
+                    {title: "Price", field: "value", width: "10%", mutator: (
                             value, data, type, params, component
                         ) => {
-                        return value * data.weight_units;
+                        const parent_data = row.getData();
+                        return value * parent_data.weight_units;
                     }, formatter: "money", formatterParams: {
                             decimal:",",
                             thousand:".",
@@ -48,19 +74,22 @@
                             symbolAfter: false
                         }
                     },
-                    {title: "Available", field: "price_valid_until", mutator: (
+                    {title: "Valid Until", field: "valid_until", sorter: "date"},
+                    {title: "Currently Valid", field: "valid", mutator: (
                             value, data, type, params, component
                         ) => {
-                            return Date.parse(value) > Date.now();
-                        }, formatter: "tickCross", width: "10%"}
+                            return Date.parse(data.valid_until) > Date.now();
+                        }, formatter: "tickCross"
+                    }
                 ]
-            },
-        ],
+            });
+        },
         pagination: "remote",
         paginationInitialPage: 0,
         paginationSize: 50,
         paginationSizeSelector: [25, 50, 100],
     });
+    // This method is responsible for the search functionality.
     function search_for_name(e) {
         table.setFilter([
                 {field: "name", type: "like", value: e.target.value}

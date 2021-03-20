@@ -21,6 +21,8 @@ whitenoise = {extras = ["brotli"], version = "^5.2.0"}
 pandas = "^1.2.1"
 openpyxl = "^3.0.6"
 django-silk = "^4.1.0"
+pydantic = "^1.8.1"
+orjson = "^3.5.1"
 
 [tool.poetry.dev-dependencies]
 isort = "^5.1.4"
