@@ -1,12 +1,14 @@
 from collections import OrderedDict
 
-from django.shortcuts import render
-from rest_framework import viewsets, mixins, permissions
+from django.http import HttpResponse
+from django.template.response import SimpleTemplateResponse
+from rest_framework import permissions
+from rest_framework.generics import GenericAPIView
 from rest_framework.pagination import LimitOffsetPagination as OffsetPag
 from rest_framework.response import Response
 
 from .models import Product
-from .models import serializers
+from .models.serializers import ProductsSerializer
 
 
 class LimitOffsetPagination(OffsetPag):
@@ -31,18 +33,35 @@ class LimitOffsetPagination(OffsetPag):
         return Response(response_data)
 
 
-class ProductsViewSet(mixins.ListModelMixin,
-                      mixins.RetrieveModelMixin,
-                      viewsets.GenericViewSet):
-    serializer_class = serializers.ProductsSerializer
-    queryset = Product.objects.all()
+class ProductsView(GenericAPIView):
     pagination_class = LimitOffsetPagination
     permission_classes = [permissions.AllowAny]
     authentication_classes = []
+    queryset = Product.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        # Pagination is still done automatically by DRF because im lazy.
+        # Replacing this with an explicit pagination call,
+        # may yield pretty high performance gains.
+        page = self.paginate_queryset(queryset)
+
+        # Data is rendered by Pydantic and then output raw
+        # So we save any overhead from Django and hand the work
+        # to orjson's C-bindings.
+        serializer = ProductsSerializer(
+            count=self.paginator.count,
+            next=self.paginator.get_next_link(),
+            prev=self.paginator.get_previous_link(),
+            results=page
+        )
+        return HttpResponse(
+            serializer.json(),
+            content_type="application/json",
+            status=200
+        )
 
 
 def overview_view(request):
-    return render(
-        request,
-        "products/overview.html"
-    )
+    return SimpleTemplateResponse("products/overview.html")

@@ -5,11 +5,7 @@ class Product(models.Model):
     art_nr = models.BigIntegerField(
         primary_key=True, editable=False, verbose_name="Artikel Nr."
     )
-    category = models.ForeignKey(
-        to="products.Category", on_delete=models.CASCADE, null=True
-    )
-    price = models.FloatField()
-    price_valid_until = models.DateField()
+    category = models.CharField(max_length=100)
     name = models.TextField()
     weight_units = models.FloatField()
 
@@ -22,15 +18,53 @@ class Product(models.Model):
         return str(self.art_nr)
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=255)
+class Price(models.Model):
+    value = models.FloatField()
+    valid_until = models.DateField()
+    parent = models.ForeignKey(
+        to=Product, on_delete=models.CASCADE, related_name="prices"
+    )
 
     class Meta:
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
+        verbose_name = "Price"
+        verbose_name_plural = "Product Prices"
+        ordering = ["parent_id"]
 
     def __str__(self) -> str:
-        return str(self.name)
+        return (
+            f"Product {self.parent_id} "
+            f"({self.parent.name}) - Price {self.value}"
+        )
 
 
-__all__ = ["Product", "Category"]
+class Kunde(models.Model):
+    kd_nr = models.IntegerField(primary_key=True)
+
+    company_name = models.CharField(
+        max_length=100,
+        help_text=(
+            "The companies actual name and legal "
+            "entity type, e.g. Wedgetables GmbH."
+        )
+    )
+    company_short = models.CharField(
+        max_length=50, help_text=(
+            "Descriptive name of the company, e.g. Wedgetables."
+        )
+    )
+
+    street = models.CharField(max_length=100)
+    zip_code = models.IntegerField()
+    city = models.CharField(max_length=50)
+
+    tel = models.CharField(
+        max_length=25, verbose_name="Telephone Number", unique=True
+    )
+    email = models.EmailField(unique=True)
+
+    class Meta:
+        verbose_name = "Kunde"
+        verbose_name_plural = "Kunden"
+
+
+__all__ = ["Product", "Price", "Kunde"]
