@@ -37,7 +37,7 @@ class ProductsView(GenericAPIView):
     pagination_class = LimitOffsetPagination
     permission_classes = [permissions.AllowAny]
     authentication_classes = []
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().prefetch_related("prices")
 
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()

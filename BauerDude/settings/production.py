@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
-    'silk',
+    # 'silk',
 
     # Default apps
     'BauerDude.apps.users',
